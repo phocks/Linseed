@@ -14,6 +14,8 @@ const {
   getUserProfile
 } = scrapeTwitter;
 
+let userToGetLinksFrom = "phocks"; // Set default
+
 const urlRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
 
 
@@ -49,12 +51,15 @@ app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
+  console.log(request.query)
+  if (request.query.user) userToGetLinksFrom = request.query.user;
+  else userToGetLinksFrom = "phocks"
   response.sendFile(__dirname + '/views/index.html');
 });
 
 // This is the API
 app.get("/api", (req, res, next) => {
-  getUrlsFrom("phocks", res);
+  getUrlsFrom(userToGetLinksFrom, res);
 });
 
 // listen for requests :)
